@@ -1,5 +1,4 @@
 package com.thong.event.feature.event;
-import com.thong.event.domain.Event;
 import com.thong.event.feature.event.dto.EventResponse;
 import com.thong.event.utils.EventStatus;
 import lombok.RequiredArgsConstructor;

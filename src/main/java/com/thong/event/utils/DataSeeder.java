@@ -60,8 +60,6 @@ public class DataSeeder {
             );
 
             categoryRepository.saveAll(categories);
-
-            log.info("✅ Successfully seeded {} categories", categories.size());
         };
     }
 }

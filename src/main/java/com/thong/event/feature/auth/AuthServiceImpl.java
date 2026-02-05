@@ -71,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
 
             Jwt jwt = (Jwt) authenticated.getPrincipal();
 
-            // ✅ extract data from refresh token
+            // extract data from refresh token
             String email = jwt.getSubject();
             String scope = jwt.getClaimAsString("scope");
 
@@ -79,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
 
             JwtClaimsSet newAccessTokenClaims = JwtClaimsSet.builder()
                     .id(UUID.randomUUID().toString())
-                    .subject(email) // ✅ from refresh token
+                    .subject(email) //  from refresh token
                     .claim("scope", scope)
                     .issuedAt(now)
                     .expiresAt(now.plus(5, ChronoUnit.MINUTES))
@@ -89,7 +89,7 @@ public class AuthServiceImpl implements AuthService {
 
             JwtClaimsSet newRefreshTokenClaims = JwtClaimsSet.builder()
                     .id(UUID.randomUUID().toString())
-                    .subject(email) // ✅ keep subject
+                    .subject(email) //  keep subject
                     .claim("scope", scope)
                     .issuedAt(now)
                     .expiresAt(now.plus(1, ChronoUnit.DAYS))

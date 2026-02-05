@@ -48,7 +48,7 @@ public class User {
     private Boolean isAccountNonExpired;
     private Boolean isAccountNonLocked;
     private Boolean isCredentialsNonExpired;
-    private Boolean isDeleted = Boolean.FALSE;
+    private Boolean isDeleted = false;
 
     /* ===== Roles ===== */
     @ManyToMany(fetch = FetchType.EAGER)

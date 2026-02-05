@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/speakers")
+@RequestMapping("/api/v1/admin/speakers")
 @RequiredArgsConstructor
 public class AdminSpeakerController {
     

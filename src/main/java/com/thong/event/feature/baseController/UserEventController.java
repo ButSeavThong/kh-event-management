@@ -1,9 +1,7 @@
 package com.thong.event.feature.baseController;
 
-import com.thong.event.domain.Event;
 import com.thong.event.domain.EventAttendance;
 import com.thong.event.feature.event.EventService;
-import com.thong.event.feature.event.EventServices;
 import com.thong.event.feature.event.dto.EventResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
