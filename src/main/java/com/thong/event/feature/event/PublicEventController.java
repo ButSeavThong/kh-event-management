@@ -1,7 +1,10 @@
 package com.thong.event.feature.event;
 import com.thong.event.domain.Event;
+import com.thong.event.feature.event.dto.EventResponse;
+import com.thong.event.utils.EventStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -10,21 +13,20 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/api/v1/events")
 @RequiredArgsConstructor
 public class PublicEventController {
-    
-    private final EventService eventService;
-    
+
+    private  final EventService eventService;
     /**
      * PUBLIC: Get all published events
      * No authentication required
      */
     @GetMapping
     @PreAuthorize("permitAll()")
-    public ResponseEntity<List<Event>> getAllPublishedEvents() {
-        List<Event> events = eventService.getAllPublishedEvents();
-        return ResponseEntity.ok(events);
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<EventResponse>> getAllPublishedEvents() {
+        return ResponseEntity.ok(eventService.findAllEventsPublic(EventStatus.PUBLISHED));
     }
     
     /**
@@ -32,9 +34,10 @@ public class PublicEventController {
      * No authentication required
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable Long id) {
-        Event event = eventService.getEventById(id);
-        return ResponseEntity.ok(event);
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<EventResponse> getEventById(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.findEventById(id));
     }
     
     /**
@@ -43,7 +46,9 @@ public class PublicEventController {
      * Query params: khan, categoryId, startDate, endDate, title
      */
     @GetMapping("/search")
-    public ResponseEntity<List<Event>> filterEvents(
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<List<EventResponse>> filterEvents(
             @RequestParam(required = false) String khan,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) 
@@ -51,9 +56,6 @@ public class PublicEventController {
             @RequestParam(required = false) 
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(required = false) String title) {
-        
-        List<Event> events = eventService.filterEvents(
-            khan, categoryId, startDate, endDate, title);
-        return ResponseEntity.ok(events);
+        return ResponseEntity.ok(eventService.filterEvents(khan, categoryId, startDate, endDate, title));
     }
 }

@@ -3,6 +3,9 @@ package com.thong.event.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.time.LocalTime;
+
 @Entity
 @Table(
     name = "event_speaker",
@@ -28,4 +31,11 @@ public class EventSpeaker {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "speaker_id", nullable = false)
     private Speaker speaker;
+
+
+    // Optional metadata
+    private Integer displayOrder;       // Order to display (1, 2, 3...)
+    private String role;                // "Keynote", "Panelist", "Workshop Leader"
+    private LocalTime speakingTime;     // e.g., "14:30" for 2:30 PM
+    private BigDecimal speakerFee;      // How much they're paid
 }

@@ -60,21 +60,26 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
-
         try {
             Authentication authentication =
-                    new BearerTokenAuthenticationToken(refreshTokenRequest.refreshToken());
+                    new BearerTokenAuthenticationToken(
+                            refreshTokenRequest.refreshToken()
+                    );
 
             Authentication authenticated =
                     jwtAuthenticationProvider.authenticate(authentication);
 
             Jwt jwt = (Jwt) authenticated.getPrincipal();
 
+            // ✅ extract data from refresh token
+            String email = jwt.getSubject();
             String scope = jwt.getClaimAsString("scope");
+
             Instant now = Instant.now();
 
             JwtClaimsSet newAccessTokenClaims = JwtClaimsSet.builder()
                     .id(UUID.randomUUID().toString())
+                    .subject(email) // ✅ from refresh token
                     .claim("scope", scope)
                     .issuedAt(now)
                     .expiresAt(now.plus(5, ChronoUnit.MINUTES))
@@ -84,6 +89,7 @@ public class AuthServiceImpl implements AuthService {
 
             JwtClaimsSet newRefreshTokenClaims = JwtClaimsSet.builder()
                     .id(UUID.randomUUID().toString())
+                    .subject(email) // ✅ keep subject
                     .claim("scope", scope)
                     .issuedAt(now)
                     .expiresAt(now.plus(1, ChronoUnit.DAYS))
@@ -92,12 +98,14 @@ public class AuthServiceImpl implements AuthService {
                     .build();
 
             String newAccessToken =
-                    jwtEncoder.encode(JwtEncoderParameters.from(newAccessTokenClaims))
-                            .getTokenValue();
+                    jwtEncoder.encode(
+                            JwtEncoderParameters.from(newAccessTokenClaims)
+                    ).getTokenValue();
 
             String newRefreshToken =
-                    refreshJwtEncoder.encode(JwtEncoderParameters.from(newRefreshTokenClaims))
-                            .getTokenValue();
+                    refreshJwtEncoder.encode(
+                            JwtEncoderParameters.from(newRefreshTokenClaims)
+                    ).getTokenValue();
 
             return JwtResponse.builder()
                     .tokenType(TOKEN_TYPE)
@@ -113,6 +121,7 @@ public class AuthServiceImpl implements AuthService {
             );
         }
     }
+
 
     @Override
     public JwtResponse login(LoginRequest loginRequest) {
@@ -133,6 +142,7 @@ public class AuthServiceImpl implements AuthService {
         // data custom data to payload
         JwtClaimsSet acessTokenClams = JwtClaimsSet.builder()
                 .id(UUID.randomUUID().toString())
+                .subject(userDetails.getEmail()) // ✅ email goes here
                 .claim("scope", scope)
                 .issuedAt(now)
                 .expiresAt(now.plus(5, ChronoUnit.MINUTES))
@@ -142,6 +152,7 @@ public class AuthServiceImpl implements AuthService {
 
         JwtClaimsSet refreshTokenClams = JwtClaimsSet.builder()
                 .id(UUID.randomUUID().toString())
+                .subject(userDetails.getEmail()) // ✅ email goes here
                 .claim("scope", scope)
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))

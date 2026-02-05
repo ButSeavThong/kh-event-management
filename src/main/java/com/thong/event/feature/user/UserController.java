@@ -21,7 +21,7 @@ public class UserController {
         return userService.getUserProfile(id);
     }
 
-    @PatchMapping("/update/{id}")
+    @PatchMapping("update/{id}")
     @PreAuthorize("hasAnyAuthority('SCOPE_USER', 'SCOPE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public UserProfileResponse updateProfileById( @PathVariable Integer id, @Valid @RequestBody UpdateProfileRequest updateProfileRequest) {

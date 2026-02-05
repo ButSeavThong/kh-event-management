@@ -3,6 +3,8 @@ package com.thong.event.feature.baseController;
 import com.thong.event.domain.Event;
 import com.thong.event.domain.EventAttendance;
 import com.thong.event.feature.event.EventService;
+import com.thong.event.feature.event.EventServices;
+import com.thong.event.feature.event.dto.EventResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user/events")
+@RequestMapping("/api/v1/user/events")
 @RequiredArgsConstructor
 public class UserEventController {
-    
     private final EventService eventService;
-    
     /**
      * USER: Join an event
      * Requires USER or ADMIN role
@@ -29,10 +29,8 @@ public class UserEventController {
     public ResponseEntity<EventAttendance> joinEvent(
             @PathVariable Long eventId,
             @AuthenticationPrincipal Jwt jwt) throws BadRequestException {
-        
         String userEmail = jwt.getSubject();  // Extract email from JWT
-        EventAttendance attendance = eventService.joinEvent(eventId, userEmail);
-        return ResponseEntity.ok(attendance);
+        return ResponseEntity.ok(eventService.joinEvent(eventId, userEmail));
     }
     
     /**
@@ -56,11 +54,9 @@ public class UserEventController {
      */
     @GetMapping("/my-events")
     @PreAuthorize("hasAnyAuthority('SCOPE_USER', 'SCOPE_ADMIN')")
-    public ResponseEntity<List<Event>> getMyJoinedEvents(
+    public ResponseEntity<List<EventResponse>> getMyJoinedEvents(
             @AuthenticationPrincipal Jwt jwt) {
-        
         String userEmail = jwt.getSubject();
-        List<Event> events = eventService.getUserJoinedEvents(userEmail);
-        return ResponseEntity.ok(events);
+        return ResponseEntity.ok(eventService.getUserJoinedEvents(userEmail));
     }
 }

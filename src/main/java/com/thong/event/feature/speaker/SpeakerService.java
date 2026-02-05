@@ -1,11 +1,12 @@
 package com.thong.event.feature.speaker;
 
 import com.thong.event.domain.Speaker;
-import com.thong.event.exception.ResourceNotFoundException;
 import com.thong.event.feature.speaker.dto.SpeakerRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class SpeakerService {
     
     public Speaker getSpeakerById(Long id) {
         return speakerRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException(
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "Speaker not found with id: " + id));
     }
     

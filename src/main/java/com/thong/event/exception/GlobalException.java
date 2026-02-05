@@ -1,74 +1,61 @@
 package com.thong.event.exception;
 
+import com.thong.event.exception.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalException {
 
-    /**
-     * Handle @Valid validation errors (DTO validation)
-     */
+    // Handle ResponseStatusException (your custom service errors)
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ExceptionResponse<String>> handleServiceException(ResponseStatusException ex) {
+        ExceptionResponse<String> errorResponse = ExceptionResponse.<String>builder()
+                .message(ex.getMessage())
+                .status(ex.getStatusCode().value())
+                .timestamp(LocalDateTime.now())
+                .detail(ex.getReason())
+                .build();
+
+        return ResponseEntity.status(ex.getStatusCode()).body(errorResponse);
+    }
+
+    // Handle validation errors (DTO @Valid failures)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationException(
-            MethodArgumentNotValidException ex) {
+    public ResponseEntity<ExceptionResponse<String>> handleValidationException(MethodArgumentNotValidException ex) {
+        String errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                .collect(Collectors.joining(", "));
 
-        Map<String, String> validationErrors = new HashMap<>();
+        ExceptionResponse<String> errorResponse = ExceptionResponse.<String>builder()
+                .message(ex.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .detail(errors)
+                .build();
 
-        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
-        }
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("error", "Validation Failed");
-        response.put("messages", validationErrors);
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(response);
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 
-    /**
-     * Handle resource not found
-     */
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleResourceNotFound(
-            ResourceNotFoundException ex) {
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("error", ex.getMessage());
-
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(response);
-    }
-
-    /**
-     * Handle all other exceptions (fallback)
-     */
+    // Handle any unexpected errors
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGlobalException(
-            Exception ex) {
+    public ResponseEntity<ExceptionResponse<String>> handleUnexpectedException(Exception ex) {
+        ExceptionResponse<String> errorResponse = ExceptionResponse.<String>builder()
+                .message(ex.getMessage())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .timestamp(LocalDateTime.now())
+                .detail(ex.getMessage())
+                .build();
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        response.put("error", "Internal Server Error");
-
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 }

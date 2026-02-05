@@ -1,7 +1,6 @@
 package com.thong.event.feature.category;
 
 import com.thong.event.domain.Category;
-import com.thong.event.exception.ResourceNotFoundException;
 import com.thong.event.feature.category.dto.CategoryRequest;
 import com.thong.event.feature.category.dto.CategoryResponse;
 import lombok.RequiredArgsConstructor;

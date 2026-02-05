@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/admin/categories")
-@RequiredArgsConstructor
+@RequiredArgsConstructor // ready
 public class AdminCategoryController {
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
@@ -48,5 +48,11 @@ public class AdminCategoryController {
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categoryRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 }

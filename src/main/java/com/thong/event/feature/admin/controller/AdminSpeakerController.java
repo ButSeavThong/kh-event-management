@@ -55,4 +55,10 @@ public class AdminSpeakerController {
         speakerService.deleteSpeaker(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Speaker> getSpeakerById(@PathVariable Long id) {
+        return ResponseEntity.ok(speakerService.getSpeakerById(id));
+    }
 }
