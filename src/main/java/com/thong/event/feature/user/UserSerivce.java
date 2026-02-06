@@ -13,4 +13,6 @@ public interface UserSerivce {
     UserProfileResponse getUserProfile(Integer id);
     UserProfileResponse UpdateProfileById(Integer id, UpdateProfileRequest updateProfileRequest);
     List<UserProfileResponse> getUserProfiles();
+
+    void adminCreateNewAdmin(CreateUserRequest createUserRequest);
 }

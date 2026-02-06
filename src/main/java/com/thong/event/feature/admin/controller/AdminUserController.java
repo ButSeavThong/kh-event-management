@@ -4,6 +4,7 @@ import com.thong.event.feature.user.UserSerivce;
 import com.thong.event.feature.user.dto.CreateUserRequest;
 import com.thong.event.feature.user.dto.UpdateProfileRequest;
 import com.thong.event.feature.user.dto.UserProfileResponse;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,5 +51,14 @@ public class AdminUserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@PathVariable Integer id) {
         userService.deleteUserById(id);
+    }
+
+    // create new admin
+    @PostMapping("/admin")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
+    public void adminCreateNewAdmin(CreateUserRequest createUserRequest) {
+        userService.register(createUserRequest);
     }
 }

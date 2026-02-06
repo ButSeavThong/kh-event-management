@@ -137,12 +137,12 @@ public class AuthServiceImpl implements AuthService {
         // add scope to payload of jwt token
         assert userDetails != null;
         String scope =  userDetails.getUser().getRoles().stream().map(Role::getName).collect(Collectors.joining(" "));
-        log.info( "Auth scope " + scope);
+//        log.info( "Auth scope " + scope);
         Instant now = Instant.now();
         // data custom data to payload
         JwtClaimsSet acessTokenClams = JwtClaimsSet.builder()
                 .id(UUID.randomUUID().toString())
-                .subject(userDetails.getEmail()) // ✅ email goes here
+                .subject(userDetails.getEmail()) // email goes here
                 .claim("scope", scope)
                 .issuedAt(now)
                 .expiresAt(now.plus(5, ChronoUnit.MINUTES))
@@ -152,7 +152,7 @@ public class AuthServiceImpl implements AuthService {
 
         JwtClaimsSet refreshTokenClams = JwtClaimsSet.builder()
                 .id(UUID.randomUUID().toString())
-                .subject(userDetails.getEmail()) // ✅ email goes here
+                .subject(userDetails.getEmail()) //  email goes here
                 .claim("scope", scope)
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))
@@ -163,9 +163,9 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtEncoder.encode(JwtEncoderParameters.from(acessTokenClams)).getTokenValue();
         String refreshToken = refreshJwtEncoder.encode(JwtEncoderParameters.from(refreshTokenClams)).getTokenValue();
 
-        log.info("Access token: {}", accessToken);
-
-        log.info("Refresh token: {}", refreshToken);
+//        log.info("Access token: {}", accessToken);
+//
+//        log.info("Refresh token: {}", refreshToken);
 
 
         return JwtResponse.builder()
@@ -208,11 +208,10 @@ public class AuthServiceImpl implements AuthService {
         user.setProfileImage("user-avatar.png");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        // First Register get Default role as a user.
         List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findById(1).orElseThrow());
-        roles.add(roleRepository.findById(2).orElseThrow());
+        roles.add(roleRepository.findByName("USER").orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
         user.setRoles(roles);
-
         userRepository.save(user);
 
     }

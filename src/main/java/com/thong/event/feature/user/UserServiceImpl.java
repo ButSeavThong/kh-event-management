@@ -114,4 +114,42 @@ public class UserServiceImpl implements  UserSerivce{
         List<User> users = userRepository.findAll();
         return userMapper.toListOfUserProfileResponse(users);
     }
+
+
+    @Override
+    public void adminCreateNewAdmin(CreateUserRequest createUserRequest) {
+        // Validate email
+        if (userRepository.existsByEmail(createUserRequest.email())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Email already exists");
+        }
+
+        // Validate password and confirmed password
+        if (!createUserRequest.password().equals(createUserRequest.confirmedPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Passwords do not match");
+        }
+
+        // Transfer data from DTO to Domain Model
+        User user = userMapper.fromCreateUserRequest(createUserRequest);
+        user.setUuid(UUID.randomUUID().toString());
+        user.setIsAccountNonLocked(true);
+        user.setIsAccountNonExpired(true);
+        user.setIsCredentialsNonExpired(true);
+        user.setIsBlocked(false);
+        user.setIsDeleted(false);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setProfileImage("user-avatar.png");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // Set role admin + user :
+        List<Role> roles = new ArrayList<>();
+        Role userRole = roleRepository.findByName("USER").orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,  "Role not found"));
+        Role adminRole = roleRepository.findByName("ADMIN").orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,  "Role not found"));
+        roles.add(userRole);
+        roles.add(adminRole);
+        user.setRoles(roles);
+
+        userRepository.save(user);
+    }
 }
