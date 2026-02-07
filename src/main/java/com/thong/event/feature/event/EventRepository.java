@@ -4,10 +4,13 @@ import com.thong.event.domain.Category;
 import com.thong.event.domain.Event;
 import com.thong.event.utils.EventStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
@@ -33,4 +36,16 @@ public interface EventRepository extends JpaRepository<Event, Long> {
         EventStatus status, 
         String title
     );
-}
+
+    @Query("""
+    SELECT e FROM Event e
+    JOIN e.category c
+    WHERE 
+        (:categoryId IS NULL OR c.id = :categoryId)
+    AND
+        (:categoryName IS NULL OR c.name ILIKE :categoryName)
+""")
+    List<Event> filterEventsByCategory(
+            @Param("categoryId") Long categoryId,
+            @Param("categoryName") String categoryName
+    );}

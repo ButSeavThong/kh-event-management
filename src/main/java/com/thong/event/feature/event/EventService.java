@@ -33,4 +33,6 @@ public interface EventService {
             LocalDate startDate,
             LocalDate endDate,
             String title);
+
+    List<EventResponse> filterEventsByCategory(Long categoryId, String categoryName);
 }

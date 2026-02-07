@@ -58,6 +58,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/events/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/speakers/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/admin/categories/**").permitAll()
                         .anyRequest().authenticated()
                 )

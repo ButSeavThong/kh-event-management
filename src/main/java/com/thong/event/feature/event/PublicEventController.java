@@ -57,4 +57,21 @@ public class PublicEventController {
             @RequestParam(required = false) String title) {
         return ResponseEntity.ok(eventService.filterEvents(khan, categoryId, startDate, endDate, title));
     }
+
+
+
+    /**
+     * Public endpoint
+     * - If categoryId is provided → filter by ID
+     * - If categoryName is provided → filter by name
+     * - If both are null → return all events
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/filter")
+    public  List<EventResponse> filterEventsByCategory(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) String categoryName
+    ) {
+        return eventService.filterEventsByCategory(categoryId, categoryName);
+    }
 }

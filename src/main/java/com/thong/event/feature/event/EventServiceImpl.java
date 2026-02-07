@@ -221,4 +221,11 @@ public class EventServiceImpl implements EventService {
     public List<Event> getAllPublishedEvents() {
         return eventRepository.findByStatus(EventStatus.PUBLISHED);
     }
+
+
+    @Override
+    public List<EventResponse> filterEventsByCategory(Long categoryId, String categoryName) {
+        List<Event> filteredEvents = eventRepository.filterEventsByCategory(categoryId, categoryName);
+        return eventMapper.toEventResponseList(filteredEvents);
+    }
 }
