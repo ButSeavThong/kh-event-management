@@ -21,7 +21,7 @@ public class AdminCategoryController {
     private final CategoryRepository categoryRepository;
     
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }

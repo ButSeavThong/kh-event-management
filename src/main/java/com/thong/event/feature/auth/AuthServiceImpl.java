@@ -82,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
                     .subject(email) //  from refresh token
                     .claim("scope", scope)
                     .issuedAt(now)
-                    .expiresAt(now.plus(5, ChronoUnit.MINUTES))
+                    .expiresAt(now.plus(10, ChronoUnit.HOURS))
                     .issuer("BackEnd Core Banking")
                     .audience(List.of("Mobile", "Android", "ReactJS"))
                     .build();
@@ -145,7 +145,7 @@ public class AuthServiceImpl implements AuthService {
                 .subject(userDetails.getEmail()) // email goes here
                 .claim("scope", scope)
                 .issuedAt(now)
-                .expiresAt(now.plus(5, ChronoUnit.MINUTES))
+                .expiresAt(now.plus(10, ChronoUnit.HOURS))
                 .audience(List.of("Mobile", "Android","ReactJS"))
                 .issuer("BackEnd Core Banking")
                 .build();

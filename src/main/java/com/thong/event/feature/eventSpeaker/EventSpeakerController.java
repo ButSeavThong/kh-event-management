@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class EventSpeakerController {
     private final EventSpeakerService eventSpeakerService;
@@ -26,6 +26,7 @@ public class EventSpeakerController {
      * No authentication required
      */
     @GetMapping("/events/{eventId}/speakers")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<EventSpeakerResponse>> getEventSpeakers(
             @PathVariable Long eventId) {
         List<EventSpeakerResponse> speakers = 
