@@ -1,8 +1,11 @@
 package com.thong.event.feature.admin.controller;
 
 import com.thong.event.domain.Speaker;
+import com.thong.event.feature.speaker.SpeakerMapper;
 import com.thong.event.feature.speaker.SpeakerService;
 import com.thong.event.feature.speaker.dto.SpeakerRequest;
+import com.thong.event.feature.speaker.dto.SpeakerResponse;
+import com.thong.event.feature.speaker.dto.UpdateSpeakerRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,35 +21,34 @@ import java.util.List;
 public class AdminSpeakerController {
     
     private final SpeakerService speakerService;
-    
+    private final SpeakerMapper speakerMapper;
     @GetMapping
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<List<Speaker>> getAllSpeakers() {
+    public ResponseEntity<List<SpeakerResponse>> getAllSpeakers() {
         return ResponseEntity.ok(speakerService.getAllSpeakers());
     }
     
     @GetMapping("/search")
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<List<Speaker>> searchSpeakers(
+    public ResponseEntity<List<SpeakerResponse>> searchSpeakers(
             @RequestParam String name) {
         return ResponseEntity.ok(speakerService.searchSpeakers(name));
     }
     
     @PostMapping
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Speaker> createSpeaker(
+    @ResponseStatus(HttpStatus.CREATED)
+    public SpeakerResponse createSpeaker(
             @Valid @RequestBody SpeakerRequest request) {
-        Speaker speaker = speakerService.createSpeaker(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(speaker);
+        return speakerService.createSpeaker(request);
     }
     
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Speaker> updateSpeaker(
+    public ResponseEntity<SpeakerResponse> updateSpeaker(
             @PathVariable Long id,
-            @Valid @RequestBody SpeakerRequest request) {
-        Speaker speaker = speakerService.updateSpeaker(id, request);
-        return ResponseEntity.ok(speaker);
+            @Valid @RequestBody UpdateSpeakerRequest request) {
+        return ResponseEntity.ok(speakerService.updateSpeaker(id, request));
     }
     
     @DeleteMapping("/{id}")
@@ -58,7 +60,8 @@ public class AdminSpeakerController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Speaker> getSpeakerById(@PathVariable Long id) {
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<SpeakerResponse> getSpeakerById(@PathVariable Long id) {
         return ResponseEntity.ok(speakerService.getSpeakerById(id));
     }
 }
