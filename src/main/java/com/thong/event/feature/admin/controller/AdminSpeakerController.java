@@ -43,7 +43,7 @@ public class AdminSpeakerController {
         return speakerService.createSpeaker(request);
     }
     
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<SpeakerResponse> updateSpeaker(
             @PathVariable Long id,
@@ -60,7 +60,6 @@ public class AdminSpeakerController {
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("permitAll()")
     public ResponseEntity<SpeakerResponse> getSpeakerById(@PathVariable Long id) {
         return ResponseEntity.ok(speakerService.getSpeakerById(id));
     }
