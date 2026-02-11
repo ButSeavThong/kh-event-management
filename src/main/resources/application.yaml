@@ -1,9 +1,4 @@
 spring:
-  application:
-    name: event
-  threads:
-    virtual:
-      enabled: true
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -12,10 +7,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
-logging:
-    level:
-      org.example.security: INFO
-      org.springframework.security: DEBUG
+
 server:
   port: ${PORT:8080}
