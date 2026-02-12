@@ -15,31 +15,31 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/admin/categories")
-@RequiredArgsConstructor // ready
+@RequiredArgsConstructor
 public class AdminCategoryController {
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
-    
+
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
-    
+
     @PostMapping
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<CategoryResponse> createCategory(
             @Valid @RequestBody CategoryRequest request) {
         return ResponseEntity.ok(categoryService.createCategory(request));
     }
-    
-//    @PutMapping("/{id}")
-//    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-//    public ResponseEntity<Category> updateCategory(
-//            @PathVariable Long id,
-//            @Valid @RequestBody CategoryRequest request) {
-//        Category category = categoryService.updateCategory(id, request);
-//        return ResponseEntity.ok(category);
-//    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<CategoryResponse> updateCategory(
+            @PathVariable Long id,
+            @Valid @RequestBody CategoryRequest request) {
+        return ResponseEntity.ok(categoryService.updateCategoryById(id, request));
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
