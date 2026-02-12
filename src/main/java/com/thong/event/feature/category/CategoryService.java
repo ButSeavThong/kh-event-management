@@ -17,24 +17,40 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
 
-
     public List<CategoryResponse> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
-        return  categoryMapper.toListOfCategoryResponse( categories );
+        return categoryMapper.toListOfCategoryResponse(categories);
     }
-    
+
     public CategoryResponse getCategoryById(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Category with id %s not found", id)));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Category with id %s not found", id)
+                ));
         return categoryMapper.toCategoryResponse(category);
     }
-    
+
     @Transactional
     public CategoryResponse createCategory(CategoryRequest request) {
         Category category = Category.builder()
-            .name(request.getName())
-            .description(request.getDescription())
-            .build();
+                .name(request.getName())
+                .description(request.getDescription())
+                .build();
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
+    @Transactional
+    public CategoryResponse updateCategoryById(Long id, CategoryRequest request) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Category with id %s not found", id)
+                ));
+
+        categoryMapper.toCategoryPartially(request, category);
+
+        category = categoryRepository.save(category);
+        return categoryMapper.toCategoryResponse(category);
+    }
 }

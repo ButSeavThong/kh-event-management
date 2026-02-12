@@ -2,6 +2,9 @@ package com.thong.event.feature.event;
 import com.thong.event.feature.event.dto.EventResponse;
 import com.thong.event.utils.EventStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +25,14 @@ public class PublicEventController {
      * No authentication required
      */
     @GetMapping
-    @PreAuthorize("permitAll()")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<EventResponse>> getAllPublishedEvents() {
-        return ResponseEntity.ok(eventService.findAllEventsPublic(EventStatus.PUBLISHED));
+    public ResponseEntity<Page<EventResponse>> getAllPublishedEvents( @RequestParam(defaultValue = "0") int page,
+                                                                      @RequestParam(defaultValue = "12") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(
+                eventService.findAllEventsPublic(EventStatus.PUBLISHED, pageable)
+        );
     }
     
     /**
@@ -45,7 +52,6 @@ public class PublicEventController {
      */
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("permitAll()")
     public ResponseEntity<List<EventResponse>> filterEvents(
             @RequestParam(required = false) String khan,
             @RequestParam(required = false) Long categoryId,

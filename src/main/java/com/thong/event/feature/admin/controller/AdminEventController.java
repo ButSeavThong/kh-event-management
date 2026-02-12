@@ -27,7 +27,16 @@ public class AdminEventController { // ready
     public ResponseEntity<List<EventResponse>> getAllEvents() {
         return ResponseEntity.ok(eventService.findAllEvents());
     }
-    
+
+    /**
+     * ADMIN: Get event by ID
+     */
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<EventResponse> getEventById(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.findEventById(id));
+    }
+
     /**
      * ADMIN: Create a new event
      */

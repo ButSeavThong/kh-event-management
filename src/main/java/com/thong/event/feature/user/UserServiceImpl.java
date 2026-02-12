@@ -85,8 +85,11 @@ public class UserServiceImpl implements  UserSerivce{
 //                .toList();
 
         return new UserProfileResponse(
+                user.getId(),
                 user.getUsername(),
                 user.getEmail(),
+                user.getGender(),
+                user.getDob(),
                 user.getIsDeleted(),
                 user.getProfileImage()
 
@@ -102,8 +105,11 @@ public class UserServiceImpl implements  UserSerivce{
         userMapper.toUserPartially(updateProfileRequest, user);
         user = userRepository.save(user);
         return new UserProfileResponse(
+                user.getId(),
                 user.getUsername(),
                 user.getEmail(),
+                user.getGender(),
+                user.getDob(),
                 user.getIsDeleted(),
                 user.getProfileImage()
         );

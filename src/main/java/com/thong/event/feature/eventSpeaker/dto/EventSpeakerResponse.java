@@ -10,6 +10,7 @@ import java.time.LocalTime;
 @Builder
 public class EventSpeakerResponse {
 
+    private Long id;
     private Long speakerId;
     private String fullName;
     private String title;

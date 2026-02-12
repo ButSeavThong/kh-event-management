@@ -7,6 +7,8 @@ import com.thong.event.feature.event.dto.EventResponse;
 import com.thong.event.feature.event.dto.UpdateEventRequest;
 import com.thong.event.utils.EventStatus;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +18,7 @@ public interface EventService {
     List<EventResponse> findAllEvents();
 
     // public
-    List<EventResponse> findAllEventsPublic(EventStatus status);
+    Page<EventResponse> findAllEventsPublic(EventStatus status, Pageable pageable);
     void deleteEventById(Long id);
     EventResponse updateEventById(Long id, UpdateEventRequest updateEventRequest);
     EventResponse findEventById(Long id);

@@ -18,5 +18,6 @@ public interface UserMapper {
     User fromRegisterRequest(RegisterRequest registerRequest);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void toUserPartially(UpdateProfileRequest updateProfileRequest, @MappingTarget User user);
+    UserProfileResponse toUserProfileResponse(User user);
     List<UserProfileResponse> toListOfUserProfileResponse(List<User> userList);
 }

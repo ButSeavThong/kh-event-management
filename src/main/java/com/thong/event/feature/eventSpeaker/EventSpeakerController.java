@@ -102,6 +102,7 @@ public class EventSpeakerController {
     // Helper method to convert to DTO
     private EventSpeakerResponse toResponse(EventSpeaker eventSpeaker) {
         return EventSpeakerResponse.builder()
+                .id(eventSpeaker.getId())
                 .speakerId(eventSpeaker.getSpeaker().getId())
                 .title(eventSpeaker.getSpeaker().getTitle())
                 .company(eventSpeaker.getSpeaker().getCompany())

@@ -15,6 +15,8 @@ import com.thong.event.utils.EventStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -54,9 +56,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventResponse> findAllEventsPublic(EventStatus status) {
-        List<Event> events = eventRepository.findByStatus(EventStatus.PUBLISHED);
-        return eventMapper.toEventResponseList(events);
+    public Page<EventResponse> findAllEventsPublic(
+            EventStatus status,
+            Pageable pageable
+    ) {
+        Page<Event> events = eventRepository.getEventByStatus(status, pageable);
+        return events.map(eventMapper::toEventResponse);
     }
 
     @Transactional
