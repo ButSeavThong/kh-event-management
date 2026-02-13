@@ -149,7 +149,7 @@ Separation of:
 
 ⚙️ Running the Application
 1️⃣ Clone Repository
-git clone https://github.com/your-username/kh-event-management.git
+git clone https://github.com/ButSeavThong/kh-event-management.git
 cd kh-event-management
 2️⃣ Configure Database
 Update application.properties:
@@ -185,14 +185,14 @@ Email notification system
 
 Event reminder scheduler
 
-Cloud image storage (AWS S3)
+Cloud image storage (reder)
 
 Docker deployment
 
 Swagger API documentation
 
 👨‍💻 Author
-Thong – Backend Developer
+Thong, Tepy, Khanha – Backend Developer
 
 📜 License
 This project is for learning and portfolio purposes.
