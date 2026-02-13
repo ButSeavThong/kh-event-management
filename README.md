@@ -172,7 +172,7 @@ Separation of:
 
 ⚙️ Running the Application
 1️⃣ Clone Repository
-git clone https://github.com/your-username/kh-event-management.git
+git clone https://github.com/ButSeavThong/kh-event-management.git
 cd kh-event-management
 
 2️⃣ Configure Database
