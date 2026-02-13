@@ -36,10 +36,11 @@ public class SpeakerService {
         List<Speaker> speakers = speakerRepository.findByFullNameContainingIgnoreCase(name);
         return speakerMapper.toListOfSpeakerResponse(speakers);
     }
-    
+
     @Transactional
     public SpeakerResponse createSpeaker(SpeakerRequest request) {
-        Speaker speaker =  speakerMapper.fromCreateSpeakerRequest(request);
+        Speaker speaker = speakerMapper.fromCreateSpeakerRequest(request);
+        speaker = speakerRepository.save(speaker);
         return speakerMapper.toSpeakerResponse(speaker);
     }
     
