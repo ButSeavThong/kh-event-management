@@ -203,7 +203,7 @@ public class AuthServiceImpl implements AuthService {
         user.setIsAccountNonExpired(true);
         user.setIsCredentialsNonExpired(true);
         user.setIsBlocked(false);
-        user.setIsDeleted(true);
+        user.setIsDeleted(false);
         user.setCreatedAt(LocalDateTime.now());
         user.setProfileImage("user-avatar.png");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
