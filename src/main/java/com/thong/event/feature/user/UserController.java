@@ -35,7 +35,7 @@ public class UserController {
         return userService.UpdateProfileById(id, updateProfileRequest);
     }
 
-
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER', 'SCOPE_ADMIN')")
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUserProfile() {
         try {
