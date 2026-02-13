@@ -1,124 +1,106 @@
-🎉 KH Event Management – Backend API
+# 🎉 KH Event Management – Backend API
 
-A RESTful Event Management System Backend built with Spring Boot.
-This API provides authentication, role-based authorization, event management, category management, speaker management, pagination, and filtering features.
+A RESTful Event Management System built with Spring Boot.  
+This backend provides authentication, role-based authorization, event management, category management, speaker management, pagination, and filtering features.
 
-🚀 Tech Stack
+---
 
-Java 17+
+## 🚀 Tech Stack
 
-Spring Boot
+- Java 17+
+- Spring Boot
+- Spring Security (JWT Authentication)
+- Spring Data JPA
+- Hibernate
+- MySQL / PostgreSQL
+- Lombok
+- Pageable & Filtering
+- RESTful API Architecture
 
-Spring Security (JWT Authentication)
+---
 
-Spring Data JPA
-
-Hibernate
-
-MySQL / PostgreSQL
-
-Lombok
-
-Pageable & Filtering
-
-RESTful API Architecture
-
-🔐 Authentication & Authorization
+## 🔐 Authentication & Authorization
 
 The system uses JWT-based authentication with Role-Based Access Control (RBAC).
 
-Roles
+### Roles
 
-ROLE_USER
+- ROLE_USER
+- ROLE_ADMIN
 
-ROLE_ADMIN
+---
 
-👤 Public Access (No Login Required)
+## 👤 Public Access (No Login Required)
 
-View published events
+- View published events
+- View event details
+- View event speakers
+- View categories
+- Pagination support
+- Filter events by category
 
-View event details
+---
 
-View event speakers
+## 👥 Authenticated User (ROLE_USER)
 
-View categories
+- Join events
+- View joined events
+- Access protected endpoints
 
-Pagination support
+---
 
-Filter events by category
+## 👑 Admin Access (ROLE_ADMIN)
 
-👥 Authenticated User
+- Create events
+- Update events
+- Delete events
+- Change event status (DRAFT / PUBLISHED / CANCELLED)
+- Manage categories
+- Manage speakers
 
-Join events
+---
 
-View joined events
+## 📦 Core Features
 
-Access protected endpoints
+### 🎟 Event Management
 
-👑 Admin Access
+- Create / Update / Delete events
+- Set event capacity
+- Manage event pricing
+- Upload event images
+- Pagination support
+- Filter by category (ID or Name)
+- Only PUBLISHED events visible to public
 
-Create events
+---
 
-Update events
+### 🗂 Category Management
 
-Delete events
+- Create category
+- Update category
+- Delete category
+- Public category listing
 
-Change event status (DRAFT / PUBLISHED / CANCELLED)
+---
 
-Manage categories
+### 🎤 Speaker Management
 
-Manage speakers
+- Add speakers to event
+- Update speaker details
+- Delete speaker
+- Retrieve speakers by event ID
 
-📦 Core Features
-🎟 Event Management
+---
 
-Create / Update / Delete events
-
-Set event capacity
-
-Price management
-
-Upload event images
-
-Pagination support
-
-Filter by:
-
-Category ID
-
-Category Name
-
-Status (PUBLISHED)
-
-🗂 Category Management
-
-Create category
-
-Update category
-
-Delete category
-
-Public category listing
-
-🎤 Speaker Management
-
-Add speakers to event
-
-Update speaker details
-
-Delete speaker
-
-Retrieve speakers by event ID
-
-🔎 Pagination Example
+## 🔎 Pagination Example
 
 Endpoint:
 
 GET /api/v1/events?page=0&size=12
 
+Response:
 
-Response format:
-
+```json
 {
   "content": [],
   "totalElements": 25,
@@ -128,7 +110,6 @@ Response format:
   "first": true,
   "last": false
 }
-
 🔗 API Structure
 🔓 Public Endpoints
 GET  /api/v1/events
@@ -137,11 +118,9 @@ GET  /api/v1/events/{id}/speakers
 GET  /api/v1/categories
 POST /api/v1/auth/login
 POST /api/v1/auth/register
-
 👤 User Endpoints (ROLE_USER)
 POST /api/v1/user/events/{id}/join
 GET  /api/v1/user/events
-
 👑 Admin Endpoints (ROLE_ADMIN)
 POST   /api/v1/admin/events
 PUT    /api/v1/admin/events/{id}
@@ -153,9 +132,7 @@ DELETE /api/v1/admin/categories/{id}
 
 POST   /api/v1/admin/events/{eventId}/speakers
 DELETE /api/v1/admin/speakers/{id}
-
 🛡 Security
-
 JWT Token authentication
 
 Method-level security using @PreAuthorize
@@ -172,33 +149,25 @@ Separation of:
 
 ⚙️ Running the Application
 1️⃣ Clone Repository
-git clone https://github.com/ButSeavThong/kh-event-management.git
+git clone https://github.com/your-username/kh-event-management.git
 cd kh-event-management
-
 2️⃣ Configure Database
-
-Update application.yml or application.properties:
+Update application.properties:
 
 spring.datasource.url=jdbc:mysql://localhost:3306/event_db
 spring.datasource.username=root
 spring.datasource.password=your_password
 
 spring.jpa.hibernate.ddl-auto=update
-
+spring.jpa.show-sql=true
 3️⃣ Run Application
-
 Using Maven:
 
 mvn clean install
 mvn spring-boot:run
-
-
-Or using IDE (Run as Spring Boot App)
-
-Server will start at:
+Application will start at:
 
 http://localhost:8080
-
 📁 Project Structure
 src/main/java/com/thong/event
  ├── controller
@@ -209,9 +178,7 @@ src/main/java/com/thong/event
  ├── mapper
  ├── entity
  └── utils
-
 🧠 Future Improvements
-
 Payment integration
 
 Email notification system
@@ -225,5 +192,7 @@ Docker deployment
 Swagger API documentation
 
 👨‍💻 Author
-
 Thong – Backend Developer
+
+📜 License
+This project is for learning and portfolio purposes.
